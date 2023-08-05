@@ -1,16 +1,57 @@
+using Carleton.API;
+using Carleton.API.DbContexts;
+using Carleton.API.Services;
+using CityInfo.API;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .WriteTo.File("logs/cityinfo.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+
 var builder = WebApplication.CreateBuilder(args);
+//builder.Logging.ClearProviders();
+//builder.Logging.AddConsole();
+
+builder.Host.UseSerilog();
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers(options =>
+{
+    options.ReturnHttpNotAcceptable = true;
+}).AddNewtonsoftJson()
+.AddXmlDataContractSerializerFormatters();
+    
+
+// Learn more about configuring Swagger/OpenAPI at
+// https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
-//build application once services added
+#if DEBUG
+builder.Services.AddTransient<IMailService, LocalMailService>();
+#else 
+builder.Services.AddTransient<IMailService, CloudMailService>();
+#endif
+
+builder.Services.AddSingleton<CitiesDataStore>();
+
+builder.Services.AddDbContext<CarletonInfoContext>(
+    dbContextOptions => dbContextOptions.UseSqlServer(
+        builder.Configuration["ConnectionStrings:DefaultConnection"]));
+
+builder.Services.AddScoped<ICarletonInfoRepository, CarletonInfoRepository>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
-//Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -25,15 +66,7 @@ app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    app.MapControllers();
+    endpoints.MapControllers();
 });
 
-
 app.Run();
-
-//app.Run(async (context) =>
-//    {
-//        await context.Response.WriteAsync("Hello world!");
-//});
-
-//app.Run();

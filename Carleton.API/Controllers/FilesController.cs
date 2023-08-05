@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 
-namespace Carleton.API.Controllers
+namespace CityInfo.API.Controllers
 {
     [Route("api/files")]
     [ApiController]
