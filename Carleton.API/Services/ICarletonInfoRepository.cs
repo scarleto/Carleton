@@ -15,5 +15,10 @@ namespace Carleton.API.Services
         Task UpdateCityAsync(City city);
         void DeletePointOfInterest(PointOfInterest pointOfInterest);
         Task<bool> SaveChangesAsync();
+        Task AddUserAsync(User user);
+        Task<bool> UserExistsAsync(string email);
+        Task<bool> UserExistsAsync(int id);
+        Task<User?> GetUserAsync(int userId);
+        void DeleteUser(User user);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Carleton.API.DbContexts;
 using Carleton.API.Entities;
+using Carleton.API.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -36,6 +37,22 @@ namespace Carleton.API.Services
             return await _context.Cities.AnyAsync(c => c.Id == cityId);
         }
 
+        public async Task<bool> UserExistsAsync(string email)
+        {
+            return await _context.User.AnyAsync(c => c.Email.ToLower() == email.ToLower());
+        }
+
+        public async Task<bool> UserExistsAsync(int id)
+        {
+            return await _context.User.AnyAsync(c => c.Id == id);
+        }
+
+        public async Task<User?> GetUserAsync(int userId)
+        {
+            return await _context.User
+                  .Where(c => c.Id == userId).FirstOrDefaultAsync();
+        }
+
         public async Task<PointOfInterest?> GetPointOfInterestForCityAsync(
             int cityId, 
             int pointOfInterestId)
@@ -67,6 +84,19 @@ namespace Carleton.API.Services
             await _context.Cities.AddAsync(city);
         }
 
+        public async Task AddUserAsync(User user)
+        {
+            //If user does not exit add.
+            if (!await UserExistsAsync(user.Email))
+            {
+                user.Email = user.Email.ToLower();
+                user.Password = HashPassword.Create(user.Password);
+                user.RegistrationDate = DateTime.UtcNow;
+                user.AuthenticationString = RandomNumber.Create();
+                await _context.User.AddAsync(user);
+            }
+        }
+
         public async Task UpdateCityAsync(City city)
         {
             var City = await GetCityAsync(city.Id, false);
@@ -80,6 +110,11 @@ namespace Carleton.API.Services
         public void DeletePointOfInterest(PointOfInterest pointOfInterest)
         {
             _context.PointsOfInterest.Remove(pointOfInterest);
+        }
+
+        public void DeleteUser(User user)
+        {
+            _context.User.Remove(user);
         }
 
         public async Task<bool> SaveChangesAsync()

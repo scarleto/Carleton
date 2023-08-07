@@ -4,6 +4,7 @@ using Carleton.API.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Carleton.API.Migrations
 {
     [DbContext(typeof(CarletonInfoContext))]
-    partial class CarletonInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20230805193529_CarletonInfoDBUserpass")]
+    partial class CarletonInfoDBUserpass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,17 +149,7 @@ namespace Carleton.API.Migrations
                     b.Property<DateTime?>("AuthenticationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("AuthenticationString")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -166,12 +158,12 @@ namespace Carleton.API.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("bit");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHashed")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -182,20 +174,6 @@ namespace Carleton.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AuthenticationDate = new DateTime(2023, 8, 6, 21, 57, 16, 611, DateTimeKind.Local).AddTicks(8752),
-                            AuthenticationString = "",
-                            Email = "scarleto64@hotmail.com",
-                            FirstName = "Steve",
-                            IsAuthenticated = true,
-                            LastName = "Carleton",
-                            Password = "e7cf3ef4f17c3999a94f2c6f612e8a888e5b1026878e4e19398b23bd38ec221a",
-                            RegistrationDate = new DateTime(2023, 8, 6, 21, 57, 16, 611, DateTimeKind.Local).AddTicks(8784)
-                        });
                 });
 
             modelBuilder.Entity("Carleton.API.Entities.PointOfInterest", b =>

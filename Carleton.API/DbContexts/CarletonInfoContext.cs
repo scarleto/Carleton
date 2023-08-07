@@ -1,4 +1,5 @@
 ﻿using Carleton.API.Entities;
+using Carleton.API.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Carleton.API.DbContexts
@@ -7,6 +8,7 @@ namespace Carleton.API.DbContexts
     {
         public DbSet<City> Cities { get; set; } = null!;
         public DbSet<PointOfInterest> PointsOfInterest { get; set; } = null!;
+        public DbSet<User> User { get; set; } = null!;
 
         public CarletonInfoContext(DbContextOptions<CarletonInfoContext> options) 
             : base(options) 
@@ -33,6 +35,18 @@ namespace Carleton.API.DbContexts
                    Id = 3,
                    Description = "The one with that big tower."
                });
+
+            modelBuilder.Entity<User>()
+               .HasData(
+              new User("Steve", "Carleton")
+              {
+                  Id = 1,
+                  Email = "scarleto64@hotmail.com",
+                  AuthenticationDate = DateTime.Now,
+                  RegistrationDate = DateTime.Now,
+                  IsAuthenticated = true,
+                  Password = HashPassword.Create("Password")
+              });
 
             modelBuilder.Entity<PointOfInterest>()
              .HasData(

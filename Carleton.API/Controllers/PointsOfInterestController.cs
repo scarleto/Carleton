@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
 using Carleton.API.Models;
 using Carleton.API.Services;
-using Carleton.API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CityInfo.API.Controllers
+namespace Carleton.API.Controllers
 {
     [Route("api/cities/{cityId}/pointsofinterest")]
     [ApiController]
@@ -79,7 +78,7 @@ namespace CityInfo.API.Controllers
                 return NotFound();
             }
 
-            var finalPointOfInterest = _mapper.Map<PointOfInterest>(pointOfInterest);
+            var finalPointOfInterest = _mapper.Map<Carleton.API.Entities.PointOfInterest>(pointOfInterest);
 
             await _cityInfoRepository.AddPointOfInterestForCityAsync(
                 cityId, finalPointOfInterest);
@@ -87,7 +86,7 @@ namespace CityInfo.API.Controllers
             await _cityInfoRepository.SaveChangesAsync();
 
             var createdPointOfInterestToReturn = 
-                _mapper.Map<PointOfInterestDto>(finalPointOfInterest);
+                _mapper.Map<Carleton.API.Models.PointOfInterestDto>(finalPointOfInterest);
 
             return CreatedAtRoute("GetPointOfInterest",
                  new
