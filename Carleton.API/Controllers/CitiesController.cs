@@ -8,7 +8,8 @@ using System.Text.Json;
 namespace Carleton.API.Controllers
 {
     [ApiController]
-    //[Authorize]
+    [Authorize]
+    [ApiVersion("1.0")]
     [Route("api/cities")]
     public class CitiesController : ControllerBase
     {
@@ -43,6 +44,13 @@ namespace Carleton.API.Controllers
             return Ok(_mapper.Map<IEnumerable<CityWithoutPointsOfInterestDto>>(cityEntities));       
         }
 
+
+        /// <summary>
+        /// Get City Steve
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="includePointsOfInterest"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCity(
             int id, bool includePointsOfInterest = false)

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Carleton.API</name>
+    </assembly>
+    <members>
+        <member name="M:Carleton.API.Controllers.CitiesController.GetCity(System.Int32,System.Boolean)">
+            <summary>
+            Get City Steve
+            </summary>
+            <param name="id"></param>
+            <param name="includePointsOfInterest"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Carleton.API.Models.CityWithoutPointsOfInterestDto">
+            <summary>
+            City Without Points Of InterestDto
+            </summary>
+        </member>
+        <member name="P:Carleton.API.Models.CityWithoutPointsOfInterestDto.Id">
+            <summary>
+            ID
+            </summary>
+        </member>
+        <member name="P:Carleton.API.Models.CityWithoutPointsOfInterestDto.Name">
+            <summary>
+            test
+            </summary>
+        </member>
+        <member name="P:Carleton.API.Models.CityWithoutPointsOfInterestDto.Description">
+            <summary>
+            test
+            </summary>
+        </member>
+        <member name="M:CityInfo.API.Controllers.UsersController.GetUser(System.Int32)">
+            <summary>
+            Get User Steve
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -10,7 +10,8 @@ namespace Carleton.API.Controllers
 {
     [Route("api/cities/{cityId}/pointsofinterest")]
     [ApiController]
-    //[Authorize(Policy = "MustBeFromNYC")]
+    [Authorize(Policy = "MustBeFromNYC")]
+    [ApiVersion("1.0")]
     public class PointsOfInterestController : ControllerBase
     {
         private readonly ILogger<PointsOfInterestController> _logger;

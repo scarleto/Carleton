@@ -14,7 +14,8 @@ namespace CityInfo.API.Controllers
 {
     [Route("api/users")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
+    [ApiVersion("1.0")]
     public class UsersController : ControllerBase
     {
         private readonly ILogger<UsersController> _logger;
@@ -38,24 +39,22 @@ namespace CityInfo.API.Controllers
                 throw new ArgumentNullException(nameof(mapper));
         }
 
-
-        [HttpGet("{userid}", Name = "GetUser")]
-        public async Task<ActionResult<UserDto>> GetUser(int id)
+        /// <summary>
+        /// Get User Steve
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(
+            int id)
         {
-            if (!await _cityInfoRepository.UserExistsAsync(id))
+            var city = await _cityInfoRepository.GetUserAsync(id);
+            if (city == null)
             {
                 return NotFound();
             }
 
-            var user = await _cityInfoRepository
-                .GetUserAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(_mapper.Map<UserDto>(user));
+            return Ok(_mapper.Map<UserDto>(city));
         }
 
 
@@ -184,7 +183,7 @@ namespace CityInfo.API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetCities(
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(
     string? name, string? searchQuery, int pageNumber = 1, int pageSize = 10)
         {
             if (pageSize > maxCitiesPageSize)
