@@ -7,17 +7,21 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using Carleton.API.Helpers;
+using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CityInfo.API.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly ILogger<UsersController> _logger;
         private readonly IMailService _mailService;
         private readonly ICarletonInfoRepository _cityInfoRepository;
         private readonly IMapper _mapper;
+        const int maxCitiesPageSize = 20;
 
         public UsersController(ILogger<UsersController> logger,
             IMailService mailService,
@@ -176,6 +180,25 @@ namespace CityInfo.API.Controllers
                 $"User {userEntity.FirstName} {userEntity.LastName} with id {userEntity.Id} was deleted.");
 
             return NoContent();
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetCities(
+    string? name, string? searchQuery, int pageNumber = 1, int pageSize = 10)
+        {
+            if (pageSize > maxCitiesPageSize)
+            {
+                pageSize = maxCitiesPageSize;
+            }
+
+            var (userEntities, paginationMetadata) = await _cityInfoRepository
+                .GetUsersAsync(name, searchQuery, pageNumber, pageSize);
+
+            Response.Headers.Add("X-Pagination",
+                JsonSerializer.Serialize(paginationMetadata));
+
+            return Ok(_mapper.Map<IEnumerable<UserDto>>(userEntities));
         }
     }
 }
