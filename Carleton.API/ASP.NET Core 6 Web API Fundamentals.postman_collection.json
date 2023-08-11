@@ -7,6 +7,36 @@
 	},
 	"item": [
 		{
+			"name": "POST Authentication info to get a token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"KevinDockx\",\r\n    \"password\": \"This is a relatively long sentence that acts as my password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:{{portNumber}}/api/authentication/authenticate",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "{{portNumber}}",
+					"path": [
+						"api",
+						"authentication",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "GET Cities",
 			"request": {
 				"auth": {
@@ -665,36 +695,6 @@
 			"response": []
 		},
 		{
-			"name": "POST Authentication info to get a token",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"KevinDockx\",\r\n    \"password\": \"This is a relatively long sentence that acts as my password\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "https://localhost:{{portNumber}}/api/authentication/authenticate",
-					"protocol": "https",
-					"host": [
-						"localhost"
-					],
-					"port": "{{portNumber}}",
-					"path": [
-						"api",
-						"authentication",
-						"authenticate"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Users Add User",
 			"request": {
 				"method": "POST",
@@ -747,6 +747,27 @@
 					"path": [
 						"api",
 						"users",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET User",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:{{portNumber}}/api/cities/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "{{portNumber}}",
+					"path": [
+						"api",
+						"cities",
 						"1"
 					]
 				}
